@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { useState, useEffect } from "react";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
-import '@aws-amplify/ui-react/styles.css';
+import "@aws-amplify/ui-react/styles.css";
 
 const client = generateClient<Schema>();
 
@@ -17,7 +17,7 @@ export default function AppWrapper() {
             return (
               <>
                 <Authenticator.SignUp.FormFields />
-                <div style={{ marginTop: '1em' }}>
+                <div style={{ marginTop: "1em" }}>
                   <label>
                     <input
                       type="checkbox"
@@ -29,20 +29,13 @@ export default function AppWrapper() {
               </>
             );
           },
-          Footer() {
-            return (
-              <div style={{ fontSize: '0.8em', marginTop: '1em' }}>
-                회원가입을 진행하면 <a href="/terms">이용약관</a> 및 <a href="/privacy">개인정보 처리방침</a>에 동의한 것으로 간주합니다.
-              </div>
-            );
-          },
         },
       }}
       services={{
         async validateCustomSignUp(_formData) {
           if (!agreed) {
             return {
-              acknowledgement: '이용약관에 동의해야 합니다.',
+              acknowledgement: "이용약관에 동의해야 합니다.",
             };
           }
         },
@@ -66,9 +59,7 @@ function App() {
 
   function createTodo() {
     const content = window.prompt("Todo content");
-    if (content) {
-      client.models.Todo.create({ content });
-    }
+    if (content) client.models.Todo.create({ content });
   }
 
   function deleteTodo(id: string) {
@@ -86,13 +77,6 @@ function App() {
           </li>
         ))}
       </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-      </div>
       <button onClick={signOut}>Sign out</button>
     </main>
   );
