@@ -55,13 +55,11 @@ export default function AppWrapper() {
               <>
                 <Authenticator.SignUp.FormFields />
                 <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  {/* ✅ 접근성 표준을 만족하는 구조로 변경 */}
                   <input
                     type="checkbox"
                     id="agreeTerms"
                     onChange={(e) => {
                       agreedRef.current = e.target.checked;
-                      console.log("약관 동의 상태:", e.target.checked);
                     }}
                   />
                   <label htmlFor="agreeTerms">
