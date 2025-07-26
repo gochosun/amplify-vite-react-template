@@ -7,18 +7,17 @@ import "@aws-amplify/ui-react/styles.css";
 const client = generateClient<Schema>();
 
 export default function AppWrapper() {
-  const [agreed, setAgreed] = useState(false);
-
   return (
     <Authenticator
       components={{
         SignUp: {
           FormFields() {
+            const [agreed, setAgreed] = useState(false); // ✅ 여기로 이동
+
+            // 상태를 저장하는 데 전역 필요 없다면 로컬 선언 권장
             return (
               <>
                 <Authenticator.SignUp.FormFields />
-
-                {/* 약관 동의 항목 */}
                 <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <label>
                     <input
@@ -31,23 +30,6 @@ export default function AppWrapper() {
               </>
             );
           },
-          Footer() {
-            return (
-              <div style={{ fontSize: "0.8rem", marginTop: "1rem" }}>
-                회원가입을 진행하면 <a href="/terms">이용약관</a> 및{" "}
-                <a href="/privacy">개인정보처리방침</a>에 동의한 것으로 간주합니다.
-              </div>
-            );
-          },
-        },
-      }}
-      services={{
-        async validateCustomSignUp(_formData) {
-          if (!agreed) {
-            return {
-              acknowledgement: "이용약관에 동의해야 합니다.",
-            };
-          }
         },
       }}
     >
