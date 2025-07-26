@@ -15,6 +15,8 @@ export default function AppWrapper() {
       components={{
         SignUp: {
           FormFields() {
+            console.log("✅ SignUp FormFields 렌더링됨"); // ✅ 이 줄이 핵심입니다
+
             return (
               <>
                 <Authenticator.SignUp.FormFields />
@@ -24,6 +26,7 @@ export default function AppWrapper() {
                       type="checkbox"
                       onChange={(e) => {
                         agreedRef.current = e.target.checked;
+                        console.log("약관 동의 상태:", e.target.checked); // ✅ 체크 여부 출력
                       }}
                     />
                     &nbsp;이용약관에 동의합니다.
