@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Authenticator } from '@aws-amplify/ui-react';
-import AppWrapper from "./App.tsx"; // AppWrapper를 불러오도록 변경
+import App from "./App.tsx";
 import "./index.css";
 import { Amplify } from "aws-amplify";
 import outputs from "../amplify_outputs.json";
@@ -11,6 +11,8 @@ Amplify.configure(outputs);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AppWrapper /> {/* ✅ Authenticator 포함된 컴포넌트 */}
+    <Authenticator>
+      <App />
+    </Authenticator>
   </React.StrictMode>
 );
