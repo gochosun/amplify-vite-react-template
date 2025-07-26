@@ -13,4 +13,5 @@ export const auth = defineAuth({
       required: true,   // 회원가입 시 반드시 입력
       mutable: true     // 가입 후 수정 가능
     }
+  }
 });
