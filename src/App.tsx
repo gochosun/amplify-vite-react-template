@@ -39,7 +39,7 @@ export default function AppWrapper() {
         },
       }}
       services={{
-        async validateCustomSignUp(formData) {
+        async validateCustomSignUp(_formData) {
           if (!agreed) {
             return {
               acknowledgement: '이용약관에 동의해야 합니다.',
