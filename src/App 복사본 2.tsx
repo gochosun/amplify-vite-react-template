@@ -5,11 +5,9 @@ import type { Schema } from "../amplify/data/resource";
 import "@aws-amplify/ui-react/styles.css";
 
 function App() {
-  const { signOut, user } = useAuthenticator();
+  const { signOut } = useAuthenticator();
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  const displayName = user?.attributes?.name || "고객님";
 
   useEffect(() => {
     const sub = client.models.Todo.observeQuery().subscribe({
@@ -31,7 +29,7 @@ function App() {
 
   return (
     <main>
-      <h1>{displayName}님, 환영합니다 👋</h1>
+      <h1>My todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
@@ -55,39 +53,14 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
-                {/* ✅ 사용자 입력 필드: Name (nickname 으로 저장됨) */}
-                <div className="amplify-field">
-                  <label className="amplify-label" htmlFor="nickname">
-                    Name
-                  </label>
-                  <input
-                    className="amplify-input"
-                    type="text"
-                    name="nickname"
-                    id="nickname"
-                    placeholder="Enter your Name"
-                    required
-                    onInvalid={(e) => {
-                      (e.target as HTMLInputElement).setCustomValidity("Name을 입력해주세요.");
-                    }}
-                    onInput={(e) => {
-                      (e.target as HTMLInputElement).setCustomValidity("");
-                    }}
-                  />
-                </div>
-
-                {/* 기본 제공 필드: Email, Password, Confirm Password */}
                 <Authenticator.SignUp.FormFields />
-
-                {/* 약관 동의 */}
-                <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <input
                     type="checkbox"
                     id="agreeTerms"
                     onChange={(e) => {
                       agreedRef.current = e.target.checked;
                     }}
-                    required
                   />
                   <label htmlFor="agreeTerms">
                     &nbsp;이용약관에 동의합니다.
@@ -122,7 +95,6 @@ export default function AppWrapper() {
           }
         },
       }}
-      signUpAttributes={["email"]} // nickname 자동 필드 제거
     >
       <App />
     </Authenticator>
