@@ -4,10 +4,46 @@ import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../amplify/data/resource";
 import "@aws-amplify/ui-react/styles.css";
 
-const client = generateClient<Schema>();
+function App() {
+  const { signOut } = useAuthenticator();
+  const client = generateClient<Schema>(); // ✅ 이제 여기서 안전하게 실행됩니다
+  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+
+  useEffect(() => {
+    const sub = client.models.Todo.observeQuery().subscribe({
+      next: (data) => setTodos([...data.items]),
+    });
+    return () => sub.unsubscribe();
+  }, []);
+
+  function createTodo() {
+    const content = window.prompt("Todo content");
+    if (content) {
+      client.models.Todo.create({ content });
+    }
+  }
+
+  function deleteTodo(id: string) {
+    client.models.Todo.delete({ id });
+  }
+
+  return (
+    <main>
+      <h1>My todos</h1>
+      <button onClick={createTodo}>+ new</button>
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
+            {todo.content}
+          </li>
+        ))}
+      </ul>
+      <button onClick={signOut}>Sign out</button>
+    </main>
+  );
+}
 
 export default function AppWrapper() {
-  // 약관 동의 여부를 ref 로 관리 (렌더링과 무관, validateCustomSignUp 에서 사용 가능)
   const agreedRef = useRef(false);
 
   return (
@@ -15,8 +51,6 @@ export default function AppWrapper() {
       components={{
         SignUp: {
           FormFields() {
-            console.log("✅ SignUp FormFields 렌더링됨"); // ✅ 이 줄이 핵심입니다
-
             return (
               <>
                 <Authenticator.SignUp.FormFields />
@@ -26,7 +60,6 @@ export default function AppWrapper() {
                       type="checkbox"
                       onChange={(e) => {
                         agreedRef.current = e.target.checked;
-                        console.log("약관 동의 상태:", e.target.checked); // ✅ 체크 여부 출력
                       }}
                     />
                     &nbsp;이용약관에 동의합니다.
@@ -64,43 +97,5 @@ export default function AppWrapper() {
     >
       <App />
     </Authenticator>
-  );
-}
-
-function App() {
-  const { signOut } = useAuthenticator();
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  useEffect(() => {
-    const sub = client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-    return () => sub.unsubscribe();
-  }, []);
-
-  function createTodo() {
-    const content = window.prompt("Todo content");
-    if (content) {
-      client.models.Todo.create({ content });
-    }
-  }
-
-  function deleteTodo(id: string) {
-    client.models.Todo.delete({ id });
-  }
-
-  return (
-    <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
-            {todo.content}
-          </li>
-        ))}
-      </ul>
-      <button onClick={signOut}>Sign out</button>
-    </main>
   );
 }
