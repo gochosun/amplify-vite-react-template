@@ -6,7 +6,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 function App() {
   const { signOut } = useAuthenticator();
-  const client = generateClient<Schema>(); // ✅ 이제 여기서 안전하게 실행됩니다
+  const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
   useEffect(() => {
@@ -55,13 +55,16 @@ export default function AppWrapper() {
               <>
                 <Authenticator.SignUp.FormFields />
                 <div style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      onChange={(e) => {
-                        agreedRef.current = e.target.checked;
-                      }}
-                    />
+                  {/* ✅ 접근성 표준을 만족하는 구조로 변경 */}
+                  <input
+                    type="checkbox"
+                    id="agreeTerms"
+                    onChange={(e) => {
+                      agreedRef.current = e.target.checked;
+                      console.log("약관 동의 상태:", e.target.checked);
+                    }}
+                  />
+                  <label htmlFor="agreeTerms">
                     &nbsp;이용약관에 동의합니다.
                   </label>
                 </div>
