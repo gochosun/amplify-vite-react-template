@@ -9,7 +9,7 @@ function App() {
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
-  const displayName = user?.attributes?.name || "고객님";
+const displayName = (user as any)?.attributes?.name || "고객님";
 
   useEffect(() => {
     const sub = client.models.Todo.observeQuery().subscribe({
