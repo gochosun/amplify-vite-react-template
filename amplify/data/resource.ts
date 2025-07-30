@@ -4,10 +4,10 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
-      owner: a.string(), // 👈 반드시 있어야 합니다
+      owner: a.string(), // 👈 필수 필드
     })
     .authorization((allow) => [
-      allow.owner("owner"), // ✅ 문자열 인자로 넘깁니다
+      allow.owner(), // ✅ ✅ ✅ 파라미터 없이 호출!
     ]),
 });
 
