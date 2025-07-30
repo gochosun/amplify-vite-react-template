@@ -4,10 +4,10 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
-      owner: a.string(), // 👈 소유자 필드 추가
+      owner: a.string(), // 👈 필수
     })
     .authorization((allow) => [
-      allow.owner({ ownerField: "owner" }), // 👈 로그인한 사용자만 접근 가능
+      allow.owner("owner"), // ✅ 수정됨
     ]),
 });
 
@@ -16,6 +16,6 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "userPool", // 👈 Cognito 로그인 사용자 인증으로 전환
+    defaultAuthorizationMode: "userPool", // ✅ 로그인 사용자 기반 인증
   },
 });
