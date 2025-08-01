@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+
+    <style>
+      .content-container {
+        width: 100%;
+        max-width: 960px;
+        padding: 0 1rem;
+        margin: 0 auto;
+      }
+
+      /* 모바일(폰)에서만 좌우 여백 축소 */
+      @media (max-width: 480px) {
+        .content-container {
+          padding: 0 0.25rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
