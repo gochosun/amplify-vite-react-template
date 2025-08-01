@@ -62,7 +62,11 @@ function App() {
       min-height: 100vh;
       max-width: 800px;
       margin: 0 auto;
-      padding: 2rem;
+
+      /* ✅ 가변적인 좌우 여백 */
+      padding-inline: clamp(1rem, 5vw, 2rem);
+      padding-block: 2rem;
+
       font-family: sans-serif;
     }
 
@@ -107,9 +111,6 @@ function App() {
     }
 
     @media (max-width: 768px) {
-      main {
-        padding: 1.5rem;
-      }
       h1 {
         font-size: 1.5rem;
         margin-bottom: 0.75rem;
@@ -122,9 +123,6 @@ function App() {
     }
 
     @media (max-width: 480px) {
-      main {
-        padding: 1rem;
-      }
       h1 {
         font-size: 1.2rem;
         margin-bottom: 0.5rem;
