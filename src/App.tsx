@@ -109,7 +109,9 @@ function App() {
       padding: 0.5rem;
       border-radius: 5px;
       cursor: pointer;
-      border: none; /* ✅ 테두리 제거 */
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
       word-break: break-word;
       overflow-wrap: break-word;
       white-space: normal;
