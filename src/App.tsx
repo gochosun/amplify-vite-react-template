@@ -46,11 +46,11 @@ function App() {
   const styles = `
     *, *::before, *::after {
       box-sizing: border-box;
-      max-width: 100%;
     }
 
     html, body {
       margin: 0;
+      padding: 0;
       width: 100%;
       overflow-x: hidden;
       background: linear-gradient(to bottom, #8e58e0, #e6dcf6);
@@ -67,11 +67,16 @@ function App() {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
+      align-items: center;
       min-height: 100vh;
-      max-width: 800px;
-      margin: 0 auto;
       padding: 1.5rem;
-      background: none;
+    }
+
+    .content-container {
+      width: 100%;
+      max-width: 960px;
+      padding: 0 1rem;
+      margin: 0 auto;
     }
 
     h1 {
@@ -81,7 +86,7 @@ function App() {
     }
 
     button {
-      margin: 0.5rem auto;
+      margin: 0.5rem 0;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       cursor: pointer;
@@ -89,8 +94,7 @@ function App() {
       color: #fff;
       border: none;
       border-radius: 5px;
-      width: min(100%, 400px);
-      display: block;
+      width: 100%;
     }
 
     ul {
@@ -100,7 +104,6 @@ function App() {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
-      background: none;
     }
 
     li {
@@ -109,9 +112,6 @@ function App() {
       padding: 0.5rem;
       border-radius: 5px;
       cursor: pointer;
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
       word-break: break-word;
       overflow-wrap: break-word;
       white-space: normal;
@@ -129,7 +129,7 @@ function App() {
       button {
         font-size: 0.9rem;
         padding: 0.4rem 0.8rem;
-        margin: 0.4rem auto;
+        margin: 0.4rem 0;
       }
     }
 
@@ -141,7 +141,7 @@ function App() {
       button {
         font-size: 0.85rem;
         padding: 0.3rem 0.6rem;
-        margin: 0.3rem auto;
+        margin: 0.3rem 0;
       }
       li {
         font-size: 0.95rem;
@@ -169,7 +169,7 @@ function App() {
           <p style={{ marginTop: "1rem" }}>할 일 목록을 불러오는 중입니다...</p>
         </div>
       ) : (
-        <>
+        <div className="content-container">
           <h1>{displayName}님, 환영합니다 👋</h1>
           <button onClick={createTodo}>+ new</button>
 
@@ -186,7 +186,7 @@ function App() {
           )}
 
           <button onClick={signOut}>Sign out</button>
-        </>
+        </div>
       )}
     </main>
   );
