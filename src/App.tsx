@@ -66,12 +66,11 @@ function App() {
     main {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-start;
       min-height: 100vh;
       max-width: 800px;
       margin: 0 auto;
-      padding-inline: clamp(1rem, 5vw, 2rem);
-      padding-block: 2rem;
+      padding: 1.5rem;
       background: none;
     }
 
@@ -96,10 +95,10 @@ function App() {
     ul {
       list-style: none;
       padding: 0;
-      margin: 0;
+      margin: 0.5rem 0;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: none;
     }
 
