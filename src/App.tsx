@@ -44,7 +44,6 @@ function App() {
   } as const;
 
   const styles = `
-    /* ✅ 전체 화면의 스크롤 및 폭 제한 */
     *, *::before, *::after {
       box-sizing: border-box;
       max-width: 100%;
@@ -71,8 +70,6 @@ function App() {
       min-height: 100vh;
       max-width: 800px;
       margin: 0 auto;
-
-      /* ✅ 디바이스 크기에 따라 여백 가변 조절 */
       padding-inline: clamp(1rem, 5vw, 2rem);
       padding-block: 2rem;
     }
@@ -111,6 +108,11 @@ function App() {
       border-radius: 5px;
       cursor: pointer;
       border: 1px solid #ccc;
+
+      /* ✅ 긴 텍스트 줄바꿈 및 스크롤 방지 */
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
 
     li:hover {
