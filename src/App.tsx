@@ -107,7 +107,7 @@ function App() {
     }
 
     li {
-      background-color: #fff;
+      background: transparent;
       color: #000;
       padding: 1rem;
       border-radius: 5px;
@@ -119,7 +119,7 @@ function App() {
     }
 
     li:hover {
-      background-color: #f0f0f0;
+      background-color: rgba(255,255,255,0.2);
     }
 
     /* 소형 스마트폰 */
