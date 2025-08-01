@@ -109,7 +109,7 @@ function App() {
     }
 
     li {
-      background: none;
+      background: #fff;
       color: #000;
       padding: 1rem;
       border-radius: 5px;
@@ -121,7 +121,7 @@ function App() {
     }
 
     li:hover {
-      background-color: rgba(255,255,255,0.2);
+      background-color: rgba(255,255,255,0.7);
     }
 
     @media (max-width: 375px) {
