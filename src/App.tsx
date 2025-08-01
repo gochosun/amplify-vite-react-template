@@ -44,15 +44,24 @@ function App() {
   } as const;
 
   const styles = `
+    /* ✅ 전체 화면의 스크롤 및 폭 제한 */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      overflow-x: hidden;
+      background: linear-gradient(to bottom, #8e58e0, #e6dcf6);
+      min-height: 100vh;
+      font-family: sans-serif;
+    }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
-    }
-
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom, #8e58e0, #e6dcf6);
-      min-height: 100vh;
     }
 
     main {
@@ -63,11 +72,9 @@ function App() {
       max-width: 800px;
       margin: 0 auto;
 
-      /* ✅ 가변적인 좌우 여백 */
+      /* ✅ 디바이스 크기에 따라 여백 가변 조절 */
       padding-inline: clamp(1rem, 5vw, 2rem);
       padding-block: 2rem;
-
-      font-family: sans-serif;
     }
 
     h1 {
