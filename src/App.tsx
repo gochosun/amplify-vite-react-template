@@ -72,7 +72,7 @@ function App() {
       margin: 0 auto;
       padding-inline: clamp(1rem, 5vw, 2rem);
       padding-block: 2rem;
-      background: none; /* ✅ 페이지 배경이 그대로 보이도록 설정 */
+      background: none;
     }
 
     h1 {
@@ -100,7 +100,7 @@ function App() {
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      background: none; /* ✅ 간격 사이도 투명하게 */
+      background: none;
     }
 
     li {
@@ -109,7 +109,7 @@ function App() {
       padding: 0.5rem;
       border-radius: 5px;
       cursor: pointer;
-      border: 1px solid #ccc;
+      border: none; /* ✅ 테두리 제거 */
       word-break: break-word;
       overflow-wrap: break-word;
       white-space: normal;
