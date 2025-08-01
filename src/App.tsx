@@ -33,7 +33,7 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
-  // 🔵 CSS Spinner 스타일 정의
+  // Spinner CSS 스타일 정의
   const spinnerStyle = {
     width: "40px",
     height: "40px",
@@ -41,7 +41,7 @@ function App() {
     borderTop: "5px solid #4caf50",
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
-    margin: "40px auto",
+    margin: "0 auto",
   } as const;
 
   const spinnerKeyframes = `
@@ -55,24 +55,40 @@ function App() {
     <main>
       <style>{spinnerKeyframes}</style>
 
-      <h1>{displayName}님, 환영합니다 👋</h1>
-      <button onClick={createTodo}>+ new</button>
-
       {isLoading ? (
-        <div style={spinnerStyle}></div>
-      ) : todos.length === 0 ? (
-        <p>현재 등록된 할 일이 없습니다.</p>
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <div style={spinnerStyle}></div>
+          <p style={{ marginTop: "1rem" }}>할 일 목록을 불러오는 중입니다...</p>
+        </div>
       ) : (
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
-              {todo.content}
-            </li>
-          ))}
-        </ul>
-      )}
+        <>
+          <h1>{displayName}님, 환영합니다 👋</h1>
+          <button onClick={createTodo}>+ new</button>
 
-      <button onClick={signOut}>Sign out</button>
+          {todos.length === 0 ? (
+            <p>현재 등록된 할 일이 없습니다.</p>
+          ) : (
+            <ul>
+              {todos.map((todo) => (
+                <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
+                  {todo.content}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <button onClick={signOut}>Sign out</button>
+        </>
+      )}
     </main>
   );
 }
@@ -87,6 +103,7 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
+                {/* Name 필드 */}
                 <div className="amplify-field">
                   <label className="amplify-label" htmlFor="nickname">
                     Name
@@ -107,9 +124,14 @@ export default function AppWrapper() {
                   />
                 </div>
 
+                {/* 기본 제공 필드: Email, Password 등 */}
                 <Authenticator.SignUp.FormFields />
 
-                <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                {/* 약관 동의 */}
+                <div
+                  className="amplify-field"
+                  style={{ marginTop: "1rem", marginBottom: "1rem" }}
+                >
                   <input
                     type="checkbox"
                     id="agreeTerms"
