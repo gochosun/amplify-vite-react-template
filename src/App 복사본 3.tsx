@@ -8,16 +8,12 @@ function App() {
   const { signOut, user } = useAuthenticator();
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  const displayName = (user as any)?.attributes?.name || "고객님";
+const displayName = (user as any)?.attributes?.name || "고객님";
 
   useEffect(() => {
     const sub = client.models.Todo.observeQuery().subscribe({
-      next: (data) => {
-        setTodos([...data.items]);
-        setIsLoading(false);
-      },
+      next: (data) => setTodos([...data.items]),
     });
     return () => sub.unsubscribe();
   }, []);
@@ -37,21 +33,13 @@ function App() {
     <main>
       <h1>{displayName}님, 환영합니다 👋</h1>
       <button onClick={createTodo}>+ new</button>
-
-      {isLoading ? (
-        <p>할 일 목록을 불러오는 중입니다...</p>
-      ) : todos.length === 0 ? (
-        <p>현재 등록된 할 일이 없습니다.</p>
-      ) : (
-        <ul>
-          {todos.map((todo) => (
-            <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
-              {todo.content}
-            </li>
-          ))}
-        </ul>
-      )}
-
+      <ul>
+        {todos.map((todo) => (
+          <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
+            {todo.content}
+          </li>
+        ))}
+      </ul>
       <button onClick={signOut}>Sign out</button>
     </main>
   );
