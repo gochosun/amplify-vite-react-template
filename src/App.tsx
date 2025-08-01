@@ -125,6 +125,9 @@ function App() {
     }
 
     @media (max-width: 375px) {
+      .content-container {
+        padding: 0 0.25rem;
+      }
       h1 {
         font-size: 1.4rem;
       }
@@ -139,6 +142,9 @@ function App() {
     }
 
     @media (max-width: 480px) {
+      .content-container {
+        padding: 0 0.25rem;
+      }
       h1 {
         font-size: 1.5rem;
       }
@@ -242,10 +248,7 @@ export default function AppWrapper() {
 
                 <Authenticator.SignUp.FormFields />
 
-                <div
-                  className="amplify-field"
-                  style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                >
+                <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <input
                     type="checkbox"
                     id="agreeTerms"
@@ -254,9 +257,7 @@ export default function AppWrapper() {
                     }}
                     required
                   />
-                  <label htmlFor="agreeTerms">
-                    &nbsp;이용약관에 동의합니다.
-                  </label>
+                  <label htmlFor="agreeTerms">&nbsp;이용약관에 동의합니다.</label>
                 </div>
               </>
             );
@@ -264,15 +265,7 @@ export default function AppWrapper() {
           Footer() {
             return (
               <div style={{ fontSize: "0.8rem", marginTop: "1rem" }}>
-                회원가입을 진행하면{" "}
-                <a href="/terms" target="_blank" rel="noopener noreferrer">
-                  이용약관
-                </a>{" "}
-                및{" "}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                  개인정보처리방침
-                </a>
-                에 동의한 것으로 간주합니다.
+                회원가입을 진행하면 <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a> 및 <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>에 동의한 것으로 간주합니다.
               </div>
             );
           },
