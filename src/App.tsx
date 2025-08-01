@@ -112,10 +112,12 @@ function App() {
       }
       h1 {
         font-size: 1.5rem;
+        margin-bottom: 0.75rem;
       }
       button {
         font-size: 0.9rem;
         padding: 0.4rem 0.8rem;
+        margin: 0.4rem 0;
       }
     }
 
@@ -125,10 +127,12 @@ function App() {
       }
       h1 {
         font-size: 1.2rem;
+        margin-bottom: 0.5rem;
       }
       button {
         font-size: 0.85rem;
         padding: 0.3rem 0.6rem;
+        margin: 0.3rem 0;
       }
       li {
         font-size: 0.95rem;
