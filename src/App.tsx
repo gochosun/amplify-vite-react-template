@@ -104,10 +104,12 @@ function App() {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
+      background: none;
+      border: none;
     }
 
     li {
-      background: transparent;
+      background: none;
       color: #000;
       padding: 1rem;
       border-radius: 5px;
@@ -122,7 +124,6 @@ function App() {
       background-color: rgba(255,255,255,0.2);
     }
 
-    /* 소형 스마트폰 */
     @media (max-width: 375px) {
       h1 {
         font-size: 1.4rem;
@@ -137,7 +138,6 @@ function App() {
       }
     }
 
-    /* 일반 스마트폰 */
     @media (max-width: 480px) {
       h1 {
         font-size: 1.5rem;
@@ -152,7 +152,6 @@ function App() {
       }
     }
 
-    /* 중형 디바이스 (태블릿 세로 등) */
     @media (max-width: 768px) {
       h1 {
         font-size: 1.75rem;
