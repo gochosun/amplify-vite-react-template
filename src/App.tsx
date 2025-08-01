@@ -49,6 +49,12 @@ function App() {
       100% { transform: rotate(360deg); }
     }
 
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #8e58e0, #e6dcf6);
+      min-height: 100vh;
+    }
+
     main {
       display: flex;
       flex-direction: column;
@@ -58,12 +64,12 @@ function App() {
       margin: 0 auto;
       padding: 2rem;
       font-family: sans-serif;
-      background-color: #bfa7e6;
     }
 
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
+      text-align: center;
     }
 
     button {
@@ -75,19 +81,22 @@ function App() {
       color: #fff;
       border: none;
       border-radius: 5px;
+      width: 100%;
     }
 
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     li {
       background-color: #fff;
       color: #000;
       padding: 0.5rem;
-      margin-bottom: 0.5rem;
       border-radius: 5px;
       cursor: pointer;
       border: 1px solid #ccc;
@@ -95,10 +104,6 @@ function App() {
 
     li:hover {
       background-color: #f0f0f0;
-    }
-
-    li:last-child {
-      margin-bottom: 0;
     }
 
     @media (max-width: 768px) {
