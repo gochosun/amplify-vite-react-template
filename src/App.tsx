@@ -50,10 +50,15 @@ function App() {
     }
 
     main {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
       max-width: 800px;
       margin: 0 auto;
       padding: 2rem;
       font-family: sans-serif;
+      background-color: #bfa7e6;
     }
 
     h1 {
@@ -66,23 +71,34 @@ function App() {
       padding: 0.5rem 1rem;
       font-size: 1rem;
       cursor: pointer;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
     }
 
     ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     li {
+      background-color: #fff;
+      color: #000;
       padding: 0.5rem;
       margin-bottom: 0.5rem;
-      background-color: #f3f3f3;
       border-radius: 5px;
       cursor: pointer;
+      border: 1px solid #ccc;
     }
 
     li:hover {
-      background-color: #e0e0e0;
+      background-color: #f0f0f0;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
     }
 
     @media (max-width: 768px) {
@@ -168,7 +184,6 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
-                {/* Name 필드 */}
                 <div className="amplify-field">
                   <label className="amplify-label" htmlFor="nickname">
                     Name
@@ -191,7 +206,6 @@ export default function AppWrapper() {
 
                 <Authenticator.SignUp.FormFields />
 
-                {/* 약관 동의 */}
                 <div
                   className="amplify-field"
                   style={{ marginTop: "1rem", marginBottom: "1rem" }}
