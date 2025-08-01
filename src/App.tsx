@@ -1,8 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "../amplify/data/resource";
-import "@aws-amplify/ui-react/styles.css";
+// ...생략된 import 부분 동일
 
 function App() {
   const { signOut, user } = useAuthenticator();
@@ -33,7 +29,7 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
-  // Spinner CSS 스타일 정의
+  // Spinner 스타일
   const spinnerStyle = {
     width: "40px",
     height: "40px",
@@ -48,6 +44,55 @@ function App() {
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
+    }
+
+    /* 반응형 스타일 */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      main {
+        padding: 1.5rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      button {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
+      }
+      ul {
+        padding-left: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      main {
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.2rem;
+      }
+      button {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.6rem;
+      }
+      li {
+        font-size: 0.95rem;
+      }
+    }
+
+    ul li {
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      margin: 0.5rem 0;
+      padding: 0.5rem 1rem;
     }
   `;
 
@@ -64,6 +109,7 @@ function App() {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
+            padding: "1rem",
           }}
         >
           <div style={spinnerStyle}></div>
@@ -90,92 +136,5 @@ function App() {
         </>
       )}
     </main>
-  );
-}
-
-export default function AppWrapper() {
-  const agreedRef = useRef(false);
-
-  return (
-    <Authenticator
-      components={{
-        SignUp: {
-          FormFields() {
-            return (
-              <>
-                {/* Name 필드 */}
-                <div className="amplify-field">
-                  <label className="amplify-label" htmlFor="nickname">
-                    Name
-                  </label>
-                  <input
-                    className="amplify-input"
-                    type="text"
-                    name="nickname"
-                    id="nickname"
-                    placeholder="Enter your Name"
-                    required
-                    onInvalid={(e) => {
-                      (e.target as HTMLInputElement).setCustomValidity("Name을 입력해주세요.");
-                    }}
-                    onInput={(e) => {
-                      (e.target as HTMLInputElement).setCustomValidity("");
-                    }}
-                  />
-                </div>
-
-                {/* 기본 제공 필드: Email, Password 등 */}
-                <Authenticator.SignUp.FormFields />
-
-                {/* 약관 동의 */}
-                <div
-                  className="amplify-field"
-                  style={{ marginTop: "1rem", marginBottom: "1rem" }}
-                >
-                  <input
-                    type="checkbox"
-                    id="agreeTerms"
-                    onChange={(e) => {
-                      agreedRef.current = e.target.checked;
-                    }}
-                    required
-                  />
-                  <label htmlFor="agreeTerms">
-                    &nbsp;이용약관에 동의합니다.
-                  </label>
-                </div>
-              </>
-            );
-          },
-          Footer() {
-            return (
-              <div style={{ fontSize: "0.8rem", marginTop: "1rem" }}>
-                회원가입을 진행하면{" "}
-                <a href="/terms" target="_blank" rel="noopener noreferrer">
-                  이용약관
-                </a>{" "}
-                및{" "}
-                <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                  개인정보처리방침
-                </a>
-                에 동의한 것으로 간주합니다.
-              </div>
-            );
-          },
-        },
-      }}
-      services={{
-        async validateCustomSignUp() {
-          if (!agreedRef.current) {
-            return {
-              acknowledgement: "이용약관에 동의해야 회원가입이 가능합니다.",
-            };
-          }
-        },
-      }}
-      signUpAttributes={["email"]}
-    >
-      <App />
-    </Authenticator>
   );
 }
