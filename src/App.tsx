@@ -75,7 +75,7 @@ function App() {
     .content-container {
       width: 100%;
       max-width: 960px;
-      padding: 0 1rem;
+      padding: 0 0.5rem; /* 좌우 여백을 1에서 0.5 로 변경함 */
       margin: 0 auto;
     }
 
