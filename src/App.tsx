@@ -33,13 +33,33 @@ function App() {
     client.models.Todo.delete({ id });
   }
 
+  // 🔵 CSS Spinner 스타일 정의
+  const spinnerStyle = {
+    width: "40px",
+    height: "40px",
+    border: "5px solid lightgray",
+    borderTop: "5px solid #4caf50",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+    margin: "40px auto",
+  } as const;
+
+  const spinnerKeyframes = `
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `;
+
   return (
     <main>
+      <style>{spinnerKeyframes}</style>
+
       <h1>{displayName}님, 환영합니다 👋</h1>
       <button onClick={createTodo}>+ new</button>
 
       {isLoading ? (
-        <p>할 일 목록을 불러오는 중입니다...</p>
+        <div style={spinnerStyle}></div>
       ) : todos.length === 0 ? (
         <p>현재 등록된 할 일이 없습니다.</p>
       ) : (
@@ -67,7 +87,6 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
-                {/* ✅ 사용자 입력 필드: Name (nickname 으로 저장됨) */}
                 <div className="amplify-field">
                   <label className="amplify-label" htmlFor="nickname">
                     Name
@@ -88,10 +107,8 @@ export default function AppWrapper() {
                   />
                 </div>
 
-                {/* 기본 제공 필드: Email, Password, Confirm Password */}
                 <Authenticator.SignUp.FormFields />
 
-                {/* 약관 동의 */}
                 <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <input
                     type="checkbox"
@@ -134,7 +151,7 @@ export default function AppWrapper() {
           }
         },
       }}
-      signUpAttributes={["email"]} // nickname 자동 필드 제거
+      signUpAttributes={["email"]}
     >
       <App />
     </Authenticator>
