@@ -81,7 +81,7 @@ function App() {
     }
 
     button {
-      margin: 0.5rem 0;
+      margin: 0.5rem auto;
       padding: 0.5rem 1rem;
       font-size: 1rem;
       cursor: pointer;
@@ -89,7 +89,8 @@ function App() {
       color: #fff;
       border: none;
       border-radius: 5px;
-      width: 100%;
+      width: min(100%, 400px);
+      display: block;
     }
 
     ul {
@@ -128,7 +129,7 @@ function App() {
       button {
         font-size: 0.9rem;
         padding: 0.4rem 0.8rem;
-        margin: 0.4rem 0;
+        margin: 0.4rem auto;
       }
     }
 
@@ -140,7 +141,7 @@ function App() {
       button {
         font-size: 0.85rem;
         padding: 0.3rem 0.6rem;
-        margin: 0.3rem 0;
+        margin: 0.3rem auto;
       }
       li {
         font-size: 0.95rem;
