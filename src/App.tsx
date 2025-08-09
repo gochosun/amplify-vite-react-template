@@ -6,15 +6,12 @@ import type { Schema } from "../amplify/data/resource";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
 
-type ViewMode = "list" | "tile";
-
 function App() {
   const { signOut } = useAuthenticator();
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [displayName, setDisplayName] = useState("고객님");
-  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   useEffect(() => {
     (async () => {
@@ -40,6 +37,7 @@ function App() {
     return () => sub.unsubscribe();
   }, []);
 
+  // 클릭 직후 포커스 해제해서 버튼이 눌린 상태가 남지 않게
   function createTodo(e?: MouseEvent<HTMLButtonElement>) {
     const btn = e?.currentTarget;
     btn?.blur();
@@ -71,6 +69,8 @@ function App() {
       * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
     }
 
+    :root { color-scheme: light; }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -78,9 +78,13 @@ function App() {
       overflow-x: hidden;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+
+      /* 밝은 파스텔 그라데이션 + 느린 드리프트 */
       background: linear-gradient(120deg, #f0f4fa, #e9f1ff, #f5f9ff);
       background-size: 200% 200%;
       animation: bg-drift 28s ease-in-out infinite;
+      background-color: #f4f8fd;
+      -webkit-tap-highlight-color: rgba(0,0,0,0);
     }
 
     @keyframes bg-drift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
@@ -104,6 +108,7 @@ function App() {
       margin: 0 auto;
       position: relative;
       animation: fade-up 400ms ease-out both;
+      background: transparent;
     }
 
     h1 {
@@ -113,14 +118,14 @@ function App() {
       animation: fade-in 360ms ease-out both;
     }
 
+    /* 상단 우측 사용자 배지 */
     .top-row {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       margin: 0.25rem 0 0.5rem 0;
       animation: fade-up 420ms ease-out both;
-      gap: 0.75rem;
     }
 
     .user-badge {
@@ -143,31 +148,7 @@ function App() {
     .user-badge:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
     .user-badge:active { transform: translateY(0); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
 
-    .view-toggle {
-      display: inline-flex;
-      border-radius: 999px;
-      background: #ffffffb8;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      overflow: hidden;
-    }
-    .view-toggle button {
-      border: none;
-      background: transparent;
-      padding: 0.5rem 0.9rem;
-      font-size: 0.95rem;
-      cursor: pointer;
-      color: #0b1220;
-      transition: background-color 160ms ease, transform 120ms ease;
-    }
-    .view-toggle button:hover { background: #eef3ff; }
-    .view-toggle button:active { transform: scale(0.98); }
-    .view-toggle button[aria-pressed="true"] {
-      background: #2f6bff;
-      color: #fff;
-    }
-
-    button.app {
+    button {
       margin: 0.5rem 0;
       padding: 1rem;
       font-size: 1.125rem;
@@ -177,23 +158,27 @@ function App() {
       border: none;
       border-radius: 10px;
       width: 100%;
-      transition: transform 160ms ease, box-shadow 200ms ease;
+      transition: transform 160ms ease, box-shadow 200ms ease, opacity 160ms ease, background-color 200ms ease;
       box-shadow: 0 6px 16px rgba(11,18,32,0.15);
+      will-change: transform;
       animation: fade-up 440ms ease-out both;
     }
-    button.app:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(11,18,32,0.18); }
-    button.app:active { transform: translateY(0) scale(0.98); box-shadow: 0 6px 16px rgba(11,18,32,0.12); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(11,18,32,0.18); }
+    button:active { transform: translateY(0) scale(0.98); box-shadow: 0 6px 16px rgba(11,18,32,0.12); }
 
-    ul.todo-list {
+    /* 리스트 모드(단일) */
+    ul {
       list-style: none;
       padding: 0;
       margin: 0.5rem 0;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      background: transparent;
       animation: fade-in 280ms ease-out both;
     }
-    li.todo-item {
+
+    li {
       background: #ffffff;
       color: #0b1220;
       padding: 1rem;
@@ -201,36 +186,13 @@ function App() {
       cursor: pointer;
       word-break: break-word;
       overflow-wrap: break-word;
+      white-space: normal;
       font-size: 1.125rem;
       box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
-      transition: transform 140ms ease, box-shadow 180ms ease;
+      transition: transform 140ms ease, box-shadow 180ms ease, background-color 180ms ease, opacity 180ms ease;
+      border: 1px solid rgba(11,18,32,0.06);
     }
-    li.todo-item:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
-
-    /* 타일 모드: 모바일 2열 / PC 3열 */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin: 0.5rem 0;
-      animation: fade-in 280ms ease-out both;
-    }
-    @media (min-width: 900px) {
-      .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-    .tile {
-      background: #ffffff;
-      color: #0b1220;
-      padding: 1rem;
-      border-radius: 14px;
-      box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
-      transition: transform 140ms ease, box-shadow 180ms ease;
-      cursor: pointer;
-      min-height: 92px;
-      display: flex;
-      align-items: flex-start;
-    }
-    .tile:hover { transform: translateY(-3px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
+    li:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
 
     .loading-hint { animation: fade-in 1200ms ease-in-out infinite alternate; opacity: 0.8; }
   `;
@@ -242,40 +204,34 @@ function App() {
       <style>{styles}</style>
 
       {isLoading ? (
-        <div style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "1rem" }}>
+        <div
+          style={{
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            padding: "1rem",
+          }}
+        >
           <div style={spinnerStyle}></div>
-          <p className="loading-hint" style={{ marginTop: "1rem" }}>할 일 목록을 불러오는 중입니다...</p>
+          <p className="loading-hint" style={{ marginTop: "1rem" }}>
+            할 일 목록을 불러오는 중입니다...
+          </p>
         </div>
       ) : (
         <div className="content-container">
           <h1>{displayName}님, 환영합니다 👋</h1>
 
+          {/* 오른쪽 가장자리 사용자 배지 */}
           <div className="top-row">
-            <div className="view-toggle" role="tablist" aria-label="보기 전환">
-              <button
-                role="tab"
-                aria-selected={viewMode === "list"}
-                aria-pressed={viewMode === "list"}
-                onClick={() => setViewMode("list")}
-              >
-                리스트
-              </button>
-              <button
-                role="tab"
-                aria-selected={viewMode === "tile"}
-                aria-pressed={viewMode === "tile"}
-                onClick={() => setViewMode("tile")}
-              >
-                타일
-              </button>
-            </div>
-
             <div className="user-badge" title={displayName}>
               {avatarText}
             </div>
           </div>
 
-          <button className="app" type="button" onClick={(e) => createTodo(e)}>
+          <button type="button" onClick={(e) => createTodo(e)}>
             + new
           </button>
 
@@ -283,35 +239,24 @@ function App() {
             <p style={{ animation: "fade-in 280ms ease-out both", opacity: 0.9 }}>
               현재 등록된 할 일이 없습니다.
             </p>
-          ) : viewMode === "list" ? (
-            <ul className="todo-list">
+          ) : (
+            <ul>
               {todos.map((todo, idx) => (
                 <li
-                  className="todo-item"
                   key={todo.id}
                   onClick={() => deleteTodo(todo.id)}
-                  style={{ animation: "fade-up 360ms ease-out both", animationDelay: `${idx * 60}ms` }}
+                  style={{
+                    animation: "fade-up 360ms ease-out both",
+                    animationDelay: `${idx * 60}ms`,
+                  }}
                 >
                   {todo.content}
                 </li>
               ))}
             </ul>
-          ) : (
-            <div className="grid">
-              {todos.map((todo, idx) => (
-                <div
-                  className="tile"
-                  key={todo.id}
-                  onClick={() => deleteTodo(todo.id)}
-                  style={{ animation: "fade-up 360ms ease-out both", animationDelay: `${idx * 60}ms` }}
-                >
-                  {todo.content}
-                </div>
-              ))}
-            </div>
           )}
 
-          <button className="app" onClick={signOut} style={{ marginTop: "0.75rem" }}>
+          <button onClick={signOut} style={{ marginTop: "0.75rem" }}>
             Sign out
           </button>
         </div>
@@ -330,7 +275,7 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
-                <div className="amplify-field">
+                <div className="amplify-field" style={{ animation: "fade-up 380ms ease-out both" }}>
                   <label className="amplify-label" htmlFor="nickname">
                     Name
                   </label>
@@ -350,9 +295,18 @@ export default function AppWrapper() {
                   />
                 </div>
 
-                <Authenticator.SignUp.FormFields />
+                <div style={{ animation: "fade-up 400ms ease-out both" }}>
+                  <Authenticator.SignUp.FormFields />
+                </div>
 
-                <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <div
+                  className="amplify-field"
+                  style={{
+                    marginTop: "1rem",
+                    marginBottom: "1rem",
+                    animation: "fade-up 420ms ease-out both",
+                  }}
+                >
                   <input
                     type="checkbox"
                     id="agreeTerms"
@@ -368,7 +322,7 @@ export default function AppWrapper() {
           },
           Footer() {
             return (
-              <div style={{ fontSize: "0.8rem", marginTop: "1rem" }}>
+              <div style={{ fontSize: "0.8rem", marginTop: "1rem", animation: "fade-in 360ms ease-out both" }}>
                 회원가입을 진행하면 <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a> 및 <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>에 동의한 것으로 간주합니다.
               </div>
             );
