@@ -56,18 +56,16 @@ function App() {
   const spinnerStyle = {
     width: "40px",
     height: "40px",
-    border: "5px solid #e6edf7",
-    borderTop: "5px solid #5b8ef1",
+    border: "5px solid lightgray",
+    borderTop: "5px solid #4caf50",
     borderRadius: "50%",
     animation: "spin 1s linear infinite",
     margin: "0 auto",
   } as const;
 
   const styles = `
-    *, *::before, *::after { box-sizing: border-box; }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
 
     html, body {
@@ -76,33 +74,19 @@ function App() {
       width: 100%;
       overflow-x: hidden;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
-
-      /* 밝은 파스텔 그라데이션에 아주 느린 드리프트 */
-      background: linear-gradient(120deg, #f0f4fa, #e9f1ff, #f5f9ff);
-      background-size: 200% 200%;
-      animation: bg-drift 28s ease-in-out infinite;
+      font-family: sans-serif;
+      /* ChatGPT 느낌의 밝은 파스텔 그라데이션 배경 */
+      background: linear-gradient(
+        to bottom right,
+        #f0f4fa 0%,
+        #dfe8f5 50%,
+        #f4f8fd 100%
+      );
     }
 
-    @keyframes bg-drift {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes fade-up {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fade-in {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-    @keyframes pulse-soft {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     main {
@@ -120,16 +104,12 @@ function App() {
       padding: 0 1rem;
       margin: 0 auto;
       position: relative;
-
-      /* 카드가 살짝 떠오르는 느낌 */
-      animation: fade-up 400ms ease-out both;
     }
 
     h1 {
       font-size: 2rem;
-      margin: 0 0 1rem 0;
+      margin-bottom: 1rem;
       text-align: center;
-      animation: fade-in 360ms ease-out both;
     }
 
     /* 상단 우측 배지 영역 */
@@ -139,33 +119,22 @@ function App() {
       justify-content: flex-end;
       align-items: center;
       margin: 0.25rem 0 0.5rem 0;
-      animation: fade-up 420ms ease-out both;
     }
 
     .user-badge {
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      background: #ffffffcc;
-      backdrop-filter: blur(4px);
-      color: #0b1220;
+      background: #fff;
+      color: #000;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
       font-size: 1rem;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
       user-select: none;
       overflow: hidden;
-      transition: transform 160ms ease, box-shadow 200ms ease;
-    }
-    .user-badge:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
-    }
-    .user-badge:active {
-      transform: translateY(0);
-      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
 
     button {
@@ -173,23 +142,11 @@ function App() {
       padding: 1rem;
       font-size: 1.125rem;
       cursor: pointer;
-      background-color: #0b1220;
+      background-color: #000;
       color: #fff;
       border: none;
-      border-radius: 10px;
+      border-radius: 5px;
       width: 100%;
-      transition: transform 160ms ease, box-shadow 200ms ease, opacity 160ms ease, background-color 200ms ease;
-      box-shadow: 0 6px 16px rgba(11,18,32,0.15);
-      will-change: transform;
-      animation: fade-up 440ms ease-out both;
-    }
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 22px rgba(11,18,32,0.18);
-    }
-    button:active {
-      transform: translateY(0) scale(0.98);
-      box-shadow: 0 6px 16px rgba(11,18,32,0.12);
     }
 
     ul {
@@ -198,44 +155,33 @@ function App() {
       margin: 0.5rem 0;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
       background: none;
       border: none;
-      animation: fade-in 280ms ease-out both;
     }
 
     li {
-      background: #ffffff;
-      color: #0b1220;
+      background: #fff;
+      color: #000;
       padding: 1rem;
-      border-radius: 12px;
+      border-radius: 5px;
       cursor: pointer;
       word-break: break-word;
       overflow-wrap: break-word;
       white-space: normal;
       font-size: 1.125rem;
-      box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
-      transition: transform 140ms ease, box-shadow 180ms ease, background-color 180ms ease, opacity 180ms ease;
     }
-    li:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08);
-      background-color: #f9fbff;
-    }
-    li:active { transform: translateY(0); }
 
-    /* 로딩 텍스트 은은한 페이드 */
-    .loading-hint {
-      animation: fade-in 1200ms ease-in-out infinite alternate;
-      opacity: 0.8;
+    li:hover {
+      background-color: rgba(255,255,255,0.7);
     }
 
     @media (max-width: 375px) {
       .content-container { padding: 0 0.25rem; }
       h1 { font-size: 1.4rem; }
       .user-badge { width: 42px; height: 42px; font-size: 0.95rem; }
-      button { font-size: 1rem; padding: 0.75rem; border-radius: 8px; }
-      li { font-size: 1rem; padding: 0.9rem; border-radius: 10px; }
+      button { font-size: 1rem; padding: 0.75rem; }
+      li { font-size: 1rem; padding: 0.75rem; }
     }
 
     @media (max-width: 480px) {
@@ -243,7 +189,7 @@ function App() {
       h1 { font-size: 1.5rem; }
       .user-badge { width: 44px; height: 44px; font-size: 0.95rem; }
       button { font-size: 1.05rem; padding: 0.85rem; }
-      li { font-size: 1.05rem; padding: 0.95rem; }
+      li { font-size: 1.05rem; padding: 0.85rem; }
     }
 
     @media (max-width: 768px) {
@@ -272,9 +218,7 @@ function App() {
           }}
         >
           <div style={spinnerStyle}></div>
-          <p className="loading-hint" style={{ marginTop: "1rem" }}>
-            할 일 목록을 불러오는 중입니다...
-          </p>
+          <p style={{ marginTop: "1rem" }}>할 일 목록을 불러오는 중입니다...</p>
         </div>
       ) : (
         <div className="content-container">
@@ -293,29 +237,18 @@ function App() {
           </button>
 
           {todos.length === 0 ? (
-            <p style={{ animation: "fade-in 280ms ease-out both", opacity: 0.9 }}>
-              현재 등록된 할 일이 없습니다.
-            </p>
+            <p>현재 등록된 할 일이 없습니다.</p>
           ) : (
             <ul>
-              {todos.map((todo, idx) => (
-                <li
-                  key={todo.id}
-                  onClick={() => deleteTodo(todo.id)}
-                  style={{
-                    animation: "fade-up 360ms ease-out both",
-                    animationDelay: `${idx * 60}ms`, // 순차 등장
-                  }}
-                >
+              {todos.map((todo) => (
+                <li key={todo.id} onClick={() => deleteTodo(todo.id)}>
                   {todo.content}
                 </li>
               ))}
             </ul>
           )}
 
-          <button onClick={signOut} style={{ marginTop: "0.75rem" }}>
-            Sign out
-          </button>
+          <button onClick={signOut}>Sign out</button>
         </div>
       )}
     </main>
@@ -332,7 +265,7 @@ export default function AppWrapper() {
           FormFields() {
             return (
               <>
-                <div className="amplify-field" style={{ animation: "fade-up 380ms ease-out both" }}>
+                <div className="amplify-field">
                   <label className="amplify-label" htmlFor="nickname">
                     Name
                   </label>
@@ -352,14 +285,9 @@ export default function AppWrapper() {
                   />
                 </div>
 
-                <div style={{ animation: "fade-up 400ms ease-out both" }}>
-                  <Authenticator.SignUp.FormFields />
-                </div>
+                <Authenticator.SignUp.FormFields />
 
-                <div
-                  className="amplify-field"
-                  style={{ marginTop: "1rem", marginBottom: "1rem", animation: "fade-up 420ms ease-out both" }}
-                >
+                <div className="amplify-field" style={{ marginTop: "1rem", marginBottom: "1rem" }}>
                   <input
                     type="checkbox"
                     id="agreeTerms"
@@ -375,7 +303,7 @@ export default function AppWrapper() {
           },
           Footer() {
             return (
-              <div style={{ fontSize: "0.8rem", marginTop: "1rem", animation: "fade-in 360ms ease-out both" }}>
+              <div style={{ fontSize: "0.8rem", marginTop: "1rem" }}>
                 회원가입을 진행하면 <a href="/terms" target="_blank" rel="noopener noreferrer">이용약관</a> 및 <a href="/privacy" target="_blank" rel="noopener noreferrer">개인정보처리방침</a>에 동의한 것으로 간주합니다.
               </div>
             );
@@ -385,7 +313,9 @@ export default function AppWrapper() {
       services={{
         async validateCustomSignUp() {
           if (!agreedRef.current) {
-            return { acknowledgement: "이용약관에 동의해야 회원가입이 가능합니다." };
+            return {
+              acknowledgement: "이용약관에 동의해야 회원가입이 가능합니다.",
+            };
           }
         },
       }}
