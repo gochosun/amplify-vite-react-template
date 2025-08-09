@@ -6,15 +6,12 @@ import type { Schema } from "../amplify/data/resource";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
 
-type ViewMode = "list" | "tile";
-
 function App() {
   const { signOut } = useAuthenticator();
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [displayName, setDisplayName] = useState("고객님");
-  const [viewMode, setViewMode] = useState<ViewMode>("list"); // 기본: 현재 상태(리스트)
 
   useEffect(() => {
     (async () => {
@@ -40,13 +37,15 @@ function App() {
     return () => sub.unsubscribe();
   }, []);
 
+  // 클릭 직후 포커스를 해제해서 버튼이 눌린 상태로 남지 않도록 처리
   function createTodo(e?: MouseEvent<HTMLButtonElement>) {
     const btn = e?.currentTarget;
-    btn?.blur();
+    btn?.blur(); // 즉시 해제
     const content = window.prompt("Todo content");
     if (content) {
       client.models.Todo.create({ content });
     }
+    // 확인/취소 모두 프롬프트 종료 직후 한 번 더 보장
     setTimeout(() => btn?.blur(), 0);
   }
 
@@ -78,15 +77,33 @@ function App() {
       overflow-x: hidden;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
+
+      /* 밝은 파스텔 그라데이션에 아주 느린 드리프트 */
       background: linear-gradient(120deg, #f0f4fa, #e9f1ff, #f5f9ff);
       background-size: 200% 200%;
       animation: bg-drift 28s ease-in-out infinite;
     }
 
-    @keyframes bg-drift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    @keyframes bg-drift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes fade-up { 0% { opacity: 0; transform: translateY(10px);} 100% { opacity: 1; transform: translateY(0);} }
-    @keyframes fade-in { from{opacity:0} to{opacity:1} }
+    @keyframes fade-up {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulse-soft {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
 
     main {
       display: flex;
@@ -103,6 +120,8 @@ function App() {
       padding: 0 1rem;
       margin: 0 auto;
       position: relative;
+
+      /* 카드가 살짝 떠오르는 느낌 */
       animation: fade-up 400ms ease-out both;
     }
 
@@ -113,15 +132,14 @@ function App() {
       animation: fade-in 360ms ease-out both;
     }
 
-    /* 상단 우측 배지 */
+    /* 상단 우측 배지 영역 */
     .top-row {
       width: 100%;
       display: flex;
-      justify-content: space-between; /* 왼쪽 토글, 오른쪽 배지 */
+      justify-content: flex-end;
       align-items: center;
       margin: 0.25rem 0 0.5rem 0;
       animation: fade-up 420ms ease-out both;
-      gap: 0.75rem;
     }
 
     .user-badge {
@@ -141,35 +159,16 @@ function App() {
       overflow: hidden;
       transition: transform 160ms ease, box-shadow 200ms ease;
     }
-    .user-badge:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
-    .user-badge:active { transform: translateY(0); box-shadow: 0 6px 18px rgba(0,0,0,0.1); }
-
-    /* 보기 전환 토글 */
-    .view-toggle {
-      display: inline-flex;
-      border-radius: 999px;
-      background: #ffffffb8;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      overflow: hidden;
+    .user-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.12);
     }
-    .view-toggle button {
-      border: none;
-      background: transparent;
-      padding: 0.5rem 0.9rem;
-      font-size: 0.95rem;
-      cursor: pointer;
-      color: #0b1220;
-      transition: background-color 160ms ease, transform 120ms ease;
-    }
-    .view-toggle button:hover { background: #eef3ff; }
-    .view-toggle button:active { transform: scale(0.98); }
-    .view-toggle button[aria-pressed="true"] {
-      background: #2f6bff;
-      color: #fff;
+    .user-badge:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
 
-    button.app {
+    button {
       margin: 0.5rem 0;
       padding: 1rem;
       font-size: 1.125rem;
@@ -184,11 +183,16 @@ function App() {
       will-change: transform;
       animation: fade-up 440ms ease-out both;
     }
-    button.app:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(11,18,32,0.18); }
-    button.app:active { transform: translateY(0) scale(0.98); box-shadow: 0 6px 16px rgba(11,18,32,0.12); }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(11,18,32,0.18);
+    }
+    button:active {
+      transform: translateY(0) scale(0.98);
+      box-shadow: 0 6px 16px rgba(11,18,32,0.12);
+    }
 
-    /* 리스트 모드 */
-    ul.todo-list {
+    ul {
       list-style: none;
       padding: 0;
       margin: 0.5rem 0;
@@ -199,7 +203,8 @@ function App() {
       border: none;
       animation: fade-in 280ms ease-out both;
     }
-    li.todo-item {
+
+    li {
       background: #ffffff;
       color: #0b1220;
       padding: 1rem;
@@ -212,66 +217,39 @@ function App() {
       box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
       transition: transform 140ms ease, box-shadow 180ms ease, background-color 180ms ease, opacity 180ms ease;
     }
-    li.todo-item:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
+    li:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08);
+      background-color: #f9fbff;
+    }
+    li:active { transform: translateY(0); }
 
-    /* 타일(그리드) 모드 */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 0.5rem 0;
-      animation: fade-in 280ms ease-out both;
+    /* 로딩 텍스트 은은한 페이드 */
+    .loading-hint {
+      animation: fade-in 1200ms ease-in-out infinite alternate;
+      opacity: 0.8;
     }
-    .tile {
-      background: #ffffff;
-      color: #0b1220;
-      padding: 1rem;
-      border-radius: 14px;
-      box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
-      transition: transform 140ms ease, box-shadow 180ms ease, background-color 180ms ease;
-      cursor: pointer;
-      min-height: 92px;
-      display: flex;
-      align-items: flex-start;
-    }
-    .tile:hover { transform: translateY(-3px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
-    .tile .title {
-      font-weight: 600; 
-      line-height: 1.35; 
-      word-break: break-word; 
-      overflow-wrap: break-word;
-    }
-
-    /* 반응형 */
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .grid { grid-template-columns: 1fr; }
-    }
-
-    .loading-hint { animation: fade-in 1200ms ease-in-out infinite alternate; opacity: 0.8; }
 
     @media (max-width: 375px) {
       .content-container { padding: 0 0.25rem; }
       h1 { font-size: 1.4rem; }
       .user-badge { width: 42px; height: 42px; font-size: 0.95rem; }
-      button.app { font-size: 1rem; padding: 0.75rem; border-radius: 8px; }
-      li.todo-item { font-size: 1rem; padding: 0.9rem; border-radius: 10px; }
+      button { font-size: 1rem; padding: 0.75rem; border-radius: 8px; }
+      li { font-size: 1rem; padding: 0.9rem; border-radius: 10px; }
     }
 
     @media (max-width: 480px) {
       .content-container { padding: 0 0.25rem; }
       h1 { font-size: 1.5rem; }
       .user-badge { width: 44px; height: 44px; font-size: 0.95rem; }
-      button.app { font-size: 1.05rem; padding: 0.85rem; }
-      li.todo-item { font-size: 1.05rem; padding: 0.95rem; }
+      button { font-size: 1.05rem; padding: 0.85rem; }
+      li { font-size: 1.05rem; padding: 0.95rem; }
     }
 
     @media (max-width: 768px) {
       h1 { font-size: 1.75rem; }
-      button.app { font-size: 1.1rem; padding: 1rem; }
-      li.todo-item { font-size: 1.1rem; padding: 1rem; }
+      button { font-size: 1.1rem; padding: 1rem; }
+      li { font-size: 1.1rem; padding: 1rem; }
     }
   `;
 
@@ -302,79 +280,40 @@ function App() {
         <div className="content-container">
           <h1>{displayName}님, 환영합니다 👋</h1>
 
-          {/* 상단 행: 보기 전환 토글 (좌) / 사용자 배지(우) */}
+          {/* + new 버튼 위, 오른쪽 가장자리 배지 */}
           <div className="top-row">
-            <div className="view-toggle" role="tablist" aria-label="보기 전환">
-              <button
-                role="tab"
-                aria-selected={viewMode === "list"}
-                aria-pressed={viewMode === "list"}
-                onClick={() => setViewMode("list")}
-                title="리스트 보기"
-              >
-                리스트
-              </button>
-              <button
-                role="tab"
-                aria-selected={viewMode === "tile"}
-                aria-pressed={viewMode === "tile"}
-                onClick={() => setViewMode("tile")}
-                title="타일 보기"
-              >
-                타일
-              </button>
-            </div>
-
             <div className="user-badge" title={displayName}>
               {avatarText}
             </div>
           </div>
 
-          {/* + new 버튼 */}
-          <button className="app" type="button" onClick={(e) => createTodo(e)}>
+          {/* 클릭 시 이벤트를 전달하여 내부에서 blur 처리 */}
+          <button type="button" onClick={(e) => createTodo(e)}>
             + new
           </button>
 
-          {/* 목록/타일 렌더링 */}
           {todos.length === 0 ? (
             <p style={{ animation: "fade-in 280ms ease-out both", opacity: 0.9 }}>
               현재 등록된 할 일이 없습니다.
             </p>
-          ) : viewMode === "list" ? (
-            <ul className="todo-list">
+          ) : (
+            <ul>
               {todos.map((todo, idx) => (
                 <li
-                  className="todo-item"
                   key={todo.id}
                   onClick={() => deleteTodo(todo.id)}
                   style={{
                     animation: "fade-up 360ms ease-out both",
-                    animationDelay: `${idx * 60}ms`,
+                    animationDelay: `${idx * 60}ms`, // 순차 등장
                   }}
                 >
                   {todo.content}
                 </li>
               ))}
             </ul>
-          ) : (
-            <div className="grid">
-              {todos.map((todo, idx) => (
-                <div
-                  className="tile"
-                  key={todo.id}
-                  onClick={() => deleteTodo(todo.id)}
-                  style={{
-                    animation: "fade-up 360ms ease-out both",
-                    animationDelay: `${idx * 60}ms`,
-                  }}
-                >
-                  <div className="title">{todo.content}</div>
-                </div>
-              ))}
-            </div>
           )}
 
-          <button className="app" onClick={signOut} style={{ marginTop: "0.75rem" }}>
+          <button onClick={signOut} style={{ marginTop: "0.75rem" }}>
             Sign out
           </button>
         </div>
