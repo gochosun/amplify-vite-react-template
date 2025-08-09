@@ -37,7 +37,6 @@ function App() {
     return () => sub.unsubscribe();
   }, []);
 
-  // 클릭 직후 포커스 해제해서 버튼이 눌린 상태가 남지 않게
   function createTodo(e?: MouseEvent<HTMLButtonElement>) {
     const btn = e?.currentTarget;
     btn?.blur();
@@ -78,8 +77,6 @@ function App() {
       overflow-x: hidden;
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", Arial, sans-serif;
-
-      /* 밝은 파스텔 그라데이션 + 느린 드리프트 */
       background: linear-gradient(120deg, #f0f4fa, #e9f1ff, #f5f9ff);
       background-size: 200% 200%;
       animation: bg-drift 28s ease-in-out infinite;
@@ -118,7 +115,6 @@ function App() {
       animation: fade-in 360ms ease-out both;
     }
 
-    /* 상단 우측 사용자 배지 */
     .top-row {
       width: 100%;
       display: flex;
@@ -166,7 +162,7 @@ function App() {
     button:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(11,18,32,0.18); }
     button:active { transform: translateY(0) scale(0.98); box-shadow: 0 6px 16px rgba(11,18,32,0.12); }
 
-    /* 리스트 모드(단일) */
+    /* 리스트 */
     ul {
       list-style: none;
       padding: 0;
@@ -176,6 +172,7 @@ function App() {
       gap: 0.5rem;
       background: transparent;
       animation: fade-in 280ms ease-out both;
+      outline: none;
     }
 
     li {
@@ -190,7 +187,7 @@ function App() {
       font-size: 1.125rem;
       box-shadow: 0 1px 2px rgba(11,18,32,0.06), 0 6px 16px rgba(11,18,32,0.06);
       transition: transform 140ms ease, box-shadow 180ms ease, background-color 180ms ease, opacity 180ms ease;
-      border: 1px solid rgba(11,18,32,0.06);
+      outline: none;
     }
     li:hover { transform: translateY(-2px); box-shadow: 0 2px 6px rgba(11,18,32,0.08), 0 10px 22px rgba(11,18,32,0.08); background-color: #f9fbff; }
 
@@ -224,7 +221,6 @@ function App() {
         <div className="content-container">
           <h1>{displayName}님, 환영합니다 👋</h1>
 
-          {/* 오른쪽 가장자리 사용자 배지 */}
           <div className="top-row">
             <div className="user-badge" title={displayName}>
               {avatarText}
