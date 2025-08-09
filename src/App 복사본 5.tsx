@@ -2,34 +2,17 @@ import { useState, useEffect, useRef } from "react";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../amplify/data/resource";
-import { fetchUserAttributes } from "aws-amplify/auth"; // ★ 추가
 import "@aws-amplify/ui-react/styles.css";
 
 function App() {
-  const { signOut } = useAuthenticator(); // ★ user 미사용 → 제거(경고 방지)
+  const { signOut, user } = useAuthenticator();
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ★ 변경: 고정값 → 상태로 전환
-  const [displayName, setDisplayName] = useState("고객님");
+  const displayName = (user as any)?.attributes?.name || "고객님";
 
   useEffect(() => {
-    // ★ 추가: 로그인 사용자 속성 로드 (nickname 우선)
-    (async () => {
-      try {
-        const attrs = await fetchUserAttributes();
-        const name =
-          attrs.nickname ||
-          attrs.name ||
-          attrs.preferred_username ||
-          attrs.email;
-        if (name) setDisplayName(name);
-      } catch {
-        // 실패 시 "고객님" 유지
-      }
-    })();
-
     const sub = client.models.Todo.observeQuery().subscribe({
       next: (data) => {
         setTodos([...data.items]);
@@ -297,8 +280,7 @@ export default function AppWrapper() {
           }
         },
       }}
-      // ★ 변경: nickname 저장되도록 추가
-      signUpAttributes={["email", "nickname"]}
+      signUpAttributes={["email"]}
     >
       <App />
     </Authenticator>
