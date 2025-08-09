@@ -1,19 +1,21 @@
 import { useState, useEffect, useRef } from "react";
-import type { MouseEvent } from "react";
 import { Authenticator, useAuthenticator } from "@aws-amplify/ui-react";
 import { generateClient } from "aws-amplify/data";
 import type { Schema } from "../amplify/data/resource";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { fetchUserAttributes } from "aws-amplify/auth"; // ★ 추가
 import "@aws-amplify/ui-react/styles.css";
 
 function App() {
-  const { signOut } = useAuthenticator();
+  const { signOut } = useAuthenticator(); // ★ user 미사용 → 제거(경고 방지)
   const client = generateClient<Schema>();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // ★ 변경: 고정값 → 상태로 전환
   const [displayName, setDisplayName] = useState("고객님");
 
   useEffect(() => {
+    // ★ 추가: 로그인 사용자 속성 로드 (nickname 우선)
     (async () => {
       try {
         const attrs = await fetchUserAttributes();
@@ -24,7 +26,7 @@ function App() {
           attrs.email;
         if (name) setDisplayName(name);
       } catch {
-        // ignore
+        // 실패 시 "고객님" 유지
       }
     })();
 
@@ -37,16 +39,11 @@ function App() {
     return () => sub.unsubscribe();
   }, []);
 
-  // 클릭 직후 포커스를 해제해서 버튼이 눌린 상태로 남지 않도록 처리
-  function createTodo(e?: MouseEvent<HTMLButtonElement>) {
-    const btn = e?.currentTarget;
-    btn?.blur(); // 즉시 해제
+  function createTodo() {
     const content = window.prompt("Todo content");
     if (content) {
       client.models.Todo.create({ content });
     }
-    // 확인/취소 모두 프롬프트 종료 직후 한 번 더 보장
-    setTimeout(() => btn?.blur(), 0);
   }
 
   function deleteTodo(id: string) {
@@ -97,38 +94,12 @@ function App() {
       max-width: 960px;
       padding: 0 1rem;
       margin: 0 auto;
-      position: relative;
     }
 
     h1 {
       font-size: 2rem;
       margin-bottom: 1rem;
       text-align: center;
-    }
-
-    /* 상단 우측 배지 영역 */
-    .top-row {
-      width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      margin: 0.25rem 0 0.5rem 0;
-    }
-
-    .user-badge {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #fff;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      user-select: none;
-      overflow: hidden;
     }
 
     button {
@@ -171,29 +142,53 @@ function App() {
     }
 
     @media (max-width: 375px) {
-      .content-container { padding: 0 0.25rem; }
-      h1 { font-size: 1.4rem; }
-      .user-badge { width: 42px; height: 42px; font-size: 0.95rem; }
-      button { font-size: 1rem; padding: 0.75rem; }
-      li { font-size: 1rem; padding: 0.75rem; }
+      .content-container {
+        padding: 0 0.25rem;
+      }
+      h1 {
+        font-size: 1.4rem;
+      }
+      button {
+        font-size: 1rem;
+        padding: 0.75rem;
+      }
+      li {
+        font-size: 1rem;
+        padding: 0.75rem;
+      }
     }
 
     @media (max-width: 480px) {
-      .content-container { padding: 0 0.25rem; }
-      h1 { font-size: 1.5rem; }
-      .user-badge { width: 44px; height: 44px; font-size: 0.95rem; }
-      button { font-size: 1.05rem; padding: 0.85rem; }
-      li { font-size: 1.05rem; padding: 0.85rem; }
+      .content-container {
+        padding: 0 0.25rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      button {
+        font-size: 1.05rem;
+        padding: 0.85rem;
+      }
+      li {
+        font-size: 1.05rem;
+        padding: 0.85rem;
+      }
     }
 
     @media (max-width: 768px) {
-      h1 { font-size: 1.75rem; }
-      button { font-size: 1.1rem; padding: 1rem; }
-      li { font-size: 1.1rem; padding: 1rem; }
+      h1 {
+        font-size: 1.75rem;
+      }
+      button {
+        font-size: 1.1rem;
+        padding: 1rem;
+      }
+      li {
+        font-size: 1.1rem;
+        padding: 1rem;
+      }
     }
   `;
-
-  const avatarText = (displayName || "").slice(0, 2);
 
   return (
     <main>
@@ -217,18 +212,7 @@ function App() {
       ) : (
         <div className="content-container">
           <h1>{displayName}님, 환영합니다 👋</h1>
-
-          {/* + new 버튼 위, 오른쪽 가장자리 배지 */}
-          <div className="top-row">
-            <div className="user-badge" title={displayName}>
-              {avatarText}
-            </div>
-          </div>
-
-          {/* 클릭 시 이벤트를 전달하여 내부에서 blur 처리 */}
-          <button type="button" onClick={(e) => createTodo(e)}>
-            + new
-          </button>
+          <button onClick={createTodo}>+ new</button>
 
           {todos.length === 0 ? (
             <p>현재 등록된 할 일이 없습니다.</p>
@@ -313,6 +297,7 @@ export default function AppWrapper() {
           }
         },
       }}
+      // ★ 변경: nickname 저장되도록 추가
       signUpAttributes={["email", "nickname"]}
     >
       <App />
