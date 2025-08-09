@@ -73,9 +73,15 @@ function App() {
       padding: 0;
       width: 100%;
       overflow-x: hidden;
-      background: linear-gradient(to bottom, #8e58e0, #e6dcf6);
       min-height: 100vh;
       font-family: sans-serif;
+      /* ChatGPT 느낌의 밝은 파스텔 그라데이션 배경 */
+      background: linear-gradient(
+        to bottom right,
+        #f0f4fa 0%,
+        #dfe8f5 50%,
+        #f4f8fd 100%
+      );
     }
 
     @keyframes spin {
